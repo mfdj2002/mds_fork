@@ -1,0 +1,1 @@
+while true; do nvidia-smi >> gpu_usage.log; sleep 1; done
