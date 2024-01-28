@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # sudo mount /dev/sdb /mnt
-sudo mount /dev/sda4 /mnt for r7525
+sudo mount /dev/sda4 /mnt #for r7525
 
 
 mnt=/mnt
