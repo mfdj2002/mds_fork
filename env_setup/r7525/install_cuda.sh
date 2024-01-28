@@ -1,9 +1,9 @@
 #!/bin/sh
 
-sudo mkfs.ext4 /dev/sdb #will be quite different if on a different machine
-# sudo mkfs.ext4 /dev/sda4
-sudo mount /dev/sdb /mnt
-# sudo mount /dev/sda4 /mnt #for r7525
+# sudo mkfs.ext4 /dev/sdb #will be quite different if on a different machine
+sudo mkfs.ext4 /dev/sda4
+# sudo mount /dev/sdb /mnt
+sudo mount /dev/sda4 /mnt #for r7525
 
 # Update and upgrade the system
 sudo apt update && sudo apt upgrade -y
