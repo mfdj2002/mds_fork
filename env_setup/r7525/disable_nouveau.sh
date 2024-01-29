@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 # Add the blacklist lines to the file
 echo "blacklist nouveau" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
