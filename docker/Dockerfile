@@ -1,4 +1,5 @@
-FROM nvidia/cuda:12.2.2-devel-ubuntu20.04
+# FROM nvidia/cuda:12.1.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.8.0-devel-ubuntu20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -40,7 +41,9 @@ RUN cp /etc/ssh/sshd_config ${STAGE_DIR}/sshd_config && \
 ##############################################################################
 # Mellanox OFED
 ##############################################################################
-ENV MLNX_OFED_VERSION=4.9-7.1.0.0
+# ENV MLNX_OFED_VERSION=4.9-7.1.0.0
+# I think nv_peer_mem 1.2 is not compatible with MLNX_OFED 4.9
+ENV MLNX_OFED_VERSION=5.4-3.7.5.0
 RUN apt-get install -y libnuma-dev
 RUN cd ${STAGE_DIR} && \
         wget -q -O - http://www.mellanox.com/downloads/ofed/MLNX_OFED-${MLNX_OFED_VERSION}/MLNX_OFED_LINUX-${MLNX_OFED_VERSION}-ubuntu20.04-x86_64.tgz | tar xzf - && \
@@ -116,7 +119,9 @@ RUN apt-get update && \
         libjpeg-dev \
         libpng-dev \
         screen \
-        libaio-dev
+        libaio-dev \
+        libffi-dev \
+        libssl-dev
 RUN pip install psutil \
         yappi \
         cffi \
@@ -151,8 +156,10 @@ RUN cat /etc/ssh/sshd_config > ${STAGE_DIR}/sshd_config && \
 ##############################################################################
 # PyTorch
 ##############################################################################
-ENV PYTORCH_VERSION=1.13.0
-RUN pip install torch==${PYTORCH_VERSION}
+# ENV PYTORCH_VERSION=1.13.0
+# RUN pip install torch
+RUN pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu118
+RUN python -c "import torch; print(torch.__version__; torch.version.cuda; torch.cuda.is_available())"
 
 ##############################################################################
 # PyYAML build issue
@@ -175,10 +182,46 @@ USER deepspeed
 ##############################################################################
 # DeepSpeed
 ##############################################################################
-RUN git clone https://github.com/microsoft/DeepSpeed.git ${STAGE_DIR}/DeepSpeed
-RUN cd ${STAGE_DIR}/DeepSpeed && \
-        git checkout . && \
-        git checkout master && \
-        ./install.sh --pip_sudo
-RUN rm -rf ${STAGE_DIR}/DeepSpeed
+# RUN git clone https://github.com/microsoft/DeepSpeed.git ${STAGE_DIR}/DeepSpeed
+# RUN cd ${STAGE_DIR}/DeepSpeed && \
+#         git checkout . && \
+#         git checkout master && \
+#         ./install.sh --pip_sudo
+# RUN rm -rf ${STAGE_DIR}/DeepSpeed
+# RUN python -c "import deepspeed; print(deepspeed.__version__)"
+
+##############################################################################
+# Megatron
+##############################################################################
+ENV HOME_DIR=/home
+RUN mkdir -p ${HOME_DIR}
+
+# Clone and install Megatron-DeepSpeed
+RUN git clone https://github.com/mfdj2002/Megatron-DeepSpeed.git ${HOME_DIR}/Megatron-DeepSpeed \
+    && cd /Megatron-DeepSpeed \
+    && python setup.py install \
+    && cd ..
+
+# Clone and install requirements for pile-enron-emails
+RUN git clone https://github.com/mfdj2002/pile-enron-emails ${STAGE_DIR}/pile-enron-emails \
+    && pip install -r /pile-enron-emails/requirements.txt
+
+# RUN rm -rf ${STAGE_DIR}/DeepSpeed
+
+# Upgrade pip, wheel, setuptools, and install DeepSpeed, transformers
+RUN pip install --upgrade pip \
+    && pip install --upgrade wheel \
+    && pip install --upgrade setuptools \
+    && pip install --no-cache-dir transformers==4.30.0 \
+    && pip install --no-cache-dir deepspeed==0.13.0
+
 RUN python -c "import deepspeed; print(deepspeed.__version__)"
+RUN python -c "import transformers; print(transformers.__version__)"
+
+# Clone NVIDIA apex and install a specific commit
+RUN git clone https://github.com/NVIDIA/apex ${STAGE_DIR}/apex \
+    && cd /apex \
+    && git checkout 2386a912164b0c5cfcd8be7a2b890fbac5607c82 \
+    && pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+
+RUN python -c "import apex; print(apex.__version__)"

@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 sudo apt update
 sudo apt install docker.io
@@ -6,7 +7,7 @@ sudo apt install docker.io
 
 sudo groupadd docker
 sudo usermod -aG docker $USER
-newgrp docker 
+newgrp docker
 
 
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
