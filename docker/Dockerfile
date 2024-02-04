@@ -1,5 +1,5 @@
-# FROM nvidia/cuda:12.1.1-devel-ubuntu20.04
-FROM nvidia/cuda:11.8.0-devel-ubuntu20.04
+FROM nvidia/cuda:12.1.1-devel-ubuntu20.04
+# FROM nvidia/cuda:11.8.0-devel-ubuntu20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -158,7 +158,8 @@ RUN cat /etc/ssh/sshd_config > ${STAGE_DIR}/sshd_config && \
 ##############################################################################
 # ENV PYTORCH_VERSION=1.13.0
 # RUN pip install torch
-RUN pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu118
+# RUN pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu118
+RUN pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
 RUN python -c "import torch; print(torch.__version__; torch.version.cuda; torch.cuda.is_available())"
 
 ##############################################################################
