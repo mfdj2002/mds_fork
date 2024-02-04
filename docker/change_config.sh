@@ -23,7 +23,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 # Use jq to modify the file (example: set "data-root" and enable "experimental" features and BuildKit)
-jq '. + {"experimental": true, "data-root": "/mnt/docker", "features": {"buildkit": true}}' "$CONFIG_FILE" | sudo tee "$TEMP_FILE" > /dev/null
+jq '. + {"data-root": "/mnt/docker", "features": {"buildkit": true}}' "$CONFIG_FILE" | sudo tee "$TEMP_FILE" > /dev/null
 
 # Replace the original file with the modified one
 sudo mv "$TEMP_FILE" "$CONFIG_FILE"
