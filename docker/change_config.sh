@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Move Docker data directory to /mnt/docker
 sudo systemctl stop docker
@@ -7,13 +8,14 @@ if [ ! -d "/mnt/docker" ]; then
 else
     echo "/mnt/docker already exists, skipping move."
 fi
-sudo systemctl start docker
+# sudo systemctl start docker
 
 CONFIG_FILE="/etc/docker/daemon.json"
 TEMP_FILE=$(mktemp)
 
 # Ensure the Docker service is stopped before modifying the daemon.json
-sudo systemctl stop docker
+# sudo systemctl stop docker
+sudo apt update && sudo apt install -y jq
 
 # Ensure the file exists
 if [ ! -f "$CONFIG_FILE" ]; then
