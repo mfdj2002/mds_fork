@@ -4,10 +4,10 @@
 
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 
-CHECKPOINT_PATH=<Specify path>
-VOCAB_FILE=<Specify path to file>/gpt2-vocab.json
-MERGE_FILE=<Specify path to file>/gpt2-merges.txt
-DATA_PATH=<Specify path and file prefix>_text_document
+CHECKPOINT_PATH=/home
+VOCAB_FILE=/home/Megatron-DeepSpeed/examples_deepspeed/rebase/gpt2-vocab.json
+MERGE_FILE=/home/Megatron-DeepSpeed/examples_deepspeed/rebase/gpt2-merges.txt
+DATA_PATH=/workspace/Megatron-DeepSpeed/examples_deepspeed/rebase/dataset/pile_gpt_train_text_document
 
 GPT_ARGS="
     --num-layers 24 \
@@ -47,5 +47,5 @@ torchrun pretrain_gpt.py \
     $GPT_ARGS \
     $DATA_ARGS \
     $OUTPUT_ARGS \
-    --save $CHECKPOINT_PATH \
-    --load $CHECKPOINT_PATH
+    --save $CHECKPOINT_PATH 
+    # --load $CHECKPOINT_PATH
