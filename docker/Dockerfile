@@ -174,11 +174,11 @@ RUN rm -rf /usr/lib/python3/dist-packages/yaml && \
 ###############################################################################
 # Add a deepspeed user with user id 8877
 #RUN useradd --create-home --uid 8877 deepspeed
-RUN useradd --create-home --uid 1000 --shell /bin/bash deepspeed
-RUN usermod -aG sudo deepspeed
-RUN echo "deepspeed ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-# # Change to non-root privilege
-USER deepspeed
+# RUN useradd --create-home --uid 1000 --shell /bin/bash deepspeed
+# RUN usermod -aG sudo deepspeed
+# RUN echo "deepspeed ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+# # # Change to non-root privilege
+# USER deepspeed
 
 ##############################################################################
 # DeepSpeed
@@ -194,21 +194,6 @@ USER deepspeed
 ##############################################################################
 # Megatron
 ##############################################################################
-ENV HOME_DIR=/home
-RUN mkdir -p ${HOME_DIR}
-
-# Clone and install Megatron-DeepSpeed
-RUN git clone https://github.com/mfdj2002/Megatron-DeepSpeed.git ${STAGE_DIR}/Megatron-DeepSpeed \
-    && cd ${STAGE_DIR}/Megatron-DeepSpeed \
-    && python setup.py install \
-    && cd ..
-
-# Clone and install requirements for pile-enron-emails
-RUN git clone https://github.com/mfdj2002/pile-enron-emails.git ${STAGE_DIR}/pile-enron-emails \
-    && pip install -r ${STAGE_DIR}/pile-enron-emails/requirements.txt
-
-# RUN rm -rf ${STAGE_DIR}/DeepSpeed
-
 # Upgrade pip, wheel, setuptools, and install DeepSpeed, transformers
 RUN pip install --upgrade pip \
     && pip install --upgrade wheel \
@@ -219,10 +204,24 @@ RUN pip install --upgrade pip \
 RUN python -c "import deepspeed; print(deepspeed.__version__)"
 RUN python -c "import transformers; print(transformers.__version__)"
 
+ENV HOME_DIR=/home
+RUN mkdir -p ${HOME_DIR}
+
+# Clone and install Megatron-DeepSpeed
+RUN git clone https://github.com/mfdj2002/Megatron-DeepSpeed.git ${HOME_DIR}/Megatron-DeepSpeed \
+    && cd ${HOME_DIR}/Megatron-DeepSpeed \
+    && python setup.py install
+
+# Clone and install requirements for pile-enron-emails
+RUN git clone https://github.com/mfdj2002/pile-enron-emails.git ${STAGE_DIR}/pile-enron-emails \
+    && pip install -r ${STAGE_DIR}/pile-enron-emails/requirements.txt \
+    && rm -rf ${STAGE_DIR}/pile-enron-emails
+
 # Clone NVIDIA apex and install a specific commit
 RUN git clone https://github.com/NVIDIA/apex.git ${STAGE_DIR}/apex \
     && cd ${STAGE_DIR}/apex \
     && git checkout 2386a912164b0c5cfcd8be7a2b890fbac5607c82 \
-    && pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+    && pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --global-option="--cpp_ext" --global-option="--cuda_ext" ./ \
+    && rm -rf ${STAGE_DIR}/apex
 
 RUN python -c "import apex; print(apex.__version__)"
