@@ -226,7 +226,7 @@ COPY compile_apex.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Use the entrypoint script as the entry point
-ENTRYPOINT ["/entrypoint.sh"]
+#ENTRYPOINT ["/entrypoint.sh"]
 
 # Specify the default command for the entrypoint script
-CMD ["bash"]
+#CMD ["/bin/bash"]
