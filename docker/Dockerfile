@@ -216,12 +216,3 @@ RUN git clone https://github.com/mfdj2002/Megatron-DeepSpeed.git ${HOME_DIR}/Meg
 RUN git clone https://github.com/mfdj2002/pile-enron-emails.git ${STAGE_DIR}/pile-enron-emails \
     && pip install -r ${STAGE_DIR}/pile-enron-emails/requirements.txt \
     && rm -rf ${STAGE_DIR}/pile-enron-emails
-
-# Clone NVIDIA apex and install a specific commit
-RUN git clone https://github.com/NVIDIA/apex.git ${STAGE_DIR}/apex \
-    && cd ${STAGE_DIR}/apex \
-    && git checkout 2386a912164b0c5cfcd8be7a2b890fbac5607c82 \
-    && pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --global-option="--cpp_ext" --global-option="--cuda_ext" ./ \
-    && rm -rf ${STAGE_DIR}/apex
-
-RUN python -c "import apex; print(apex.__version__)"

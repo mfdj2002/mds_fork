@@ -15,7 +15,6 @@ fi
 # sudo systemctl start docker
 
 CONFIG_FILE="/etc/docker/daemon.json"
-#TEMP_FILE=$(mktemp)
 TEMP_FILE=$(sudo mktemp)
 
 # Ensure the Docker service is stopped before modifying the daemon.json

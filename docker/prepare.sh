@@ -2,19 +2,22 @@
 set -e
 
 # sudo mkfs.ext4 /dev/sdb #will be quite different if on a different machine
-# sudo mkfs.ext4 /dev/sda4
+sudo mkfs.ext4 /dev/sda4
 # # sudo mount /dev/sdb /mnt
-# sudo mount /dev/sda4 /mnt #for r7525
+sudo mount /dev/sda4 /mnt #for r7525
 
 # Update and upgrade the system
-# sudo apt update
+sudo apt update
 
-# sudo apt install docker.io -y
+sudo apt install docker.io -y
 
 
 # sudo groupadd docker
 # sudo usermod -aG docker $USER
 # newgrp docker
+sudo groupadd docker || true
+sudo usermod -aG docker $USER || true
+
 
 
 distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
