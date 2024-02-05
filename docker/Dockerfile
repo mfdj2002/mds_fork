@@ -160,7 +160,7 @@ RUN cat /etc/ssh/sshd_config > ${STAGE_DIR}/sshd_config && \
 # RUN pip install torch
 # RUN pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu118
 RUN pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu121
-RUN python -c "import torch; print(torch.__version__; torch.version.cuda; torch.cuda.is_available())"
+RUN python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available())"
 
 ##############################################################################
 # PyYAML build issue
@@ -198,14 +198,14 @@ ENV HOME_DIR=/home
 RUN mkdir -p ${HOME_DIR}
 
 # Clone and install Megatron-DeepSpeed
-RUN git clone https://github.com/mfdj2002/Megatron-DeepSpeed.git ${HOME_DIR}/Megatron-DeepSpeed \
-    && cd /Megatron-DeepSpeed \
+RUN git clone https://github.com/mfdj2002/Megatron-DeepSpeed.git ${STAGE_DIR}/Megatron-DeepSpeed \
+    && cd ${STAGE_DIR}/Megatron-DeepSpeed \
     && python setup.py install \
     && cd ..
 
 # Clone and install requirements for pile-enron-emails
-RUN git clone https://github.com/mfdj2002/pile-enron-emails ${STAGE_DIR}/pile-enron-emails \
-    && pip install -r /pile-enron-emails/requirements.txt
+RUN git clone https://github.com/mfdj2002/pile-enron-emails.git ${STAGE_DIR}/pile-enron-emails \
+    && pip install -r ${STAGE_DIR}/pile-enron-emails/requirements.txt
 
 # RUN rm -rf ${STAGE_DIR}/DeepSpeed
 
@@ -220,8 +220,8 @@ RUN python -c "import deepspeed; print(deepspeed.__version__)"
 RUN python -c "import transformers; print(transformers.__version__)"
 
 # Clone NVIDIA apex and install a specific commit
-RUN git clone https://github.com/NVIDIA/apex ${STAGE_DIR}/apex \
-    && cd /apex \
+RUN git clone https://github.com/NVIDIA/apex.git ${STAGE_DIR}/apex \
+    && cd ${STAGE_DIR}/apex \
     && git checkout 2386a912164b0c5cfcd8be7a2b890fbac5607c82 \
     && pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --global-option="--cpp_ext" --global-option="--cuda_ext" ./
 

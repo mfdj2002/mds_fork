@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 set -x
+
+# Make sure you are mounted
+sudo mount /dev/sda4 /mnt #for r7525
+
 # Move Docker data directory to /mnt/docker
 sudo systemctl stop docker
 if [ ! -d "/mnt/docker" ]; then
