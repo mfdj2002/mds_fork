@@ -218,3 +218,15 @@ RUN git clone https://github.com/mfdj2002/pile-enron-emails.git ${STAGE_DIR}/pil
     && rm -rf ${STAGE_DIR}/pile-enron-emails
 
 RUN git clone https://github.com/NVIDIA/apex ${STAGE_DIR}/apex
+
+# Copy the entrypoint script into the image
+COPY compile_apex.sh /entrypoint.sh
+
+# Make sure the script is executable
+RUN chmod +x /entrypoint.sh
+
+# Use the entrypoint script as the entry point
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Specify the default command for the entrypoint script
+CMD ["bash"]
