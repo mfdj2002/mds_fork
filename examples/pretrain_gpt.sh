@@ -4,7 +4,7 @@
 
 export CUDA_DEVICE_MAX_CONNECTIONS=1
 
-CHECKPOINT_PATH=/home
+CHECKPOINT_PATH=/workspace/checkpoint
 VOCAB_FILE=/home/Megatron-DeepSpeed/examples_deepspeed/rebase/gpt2-vocab.json
 MERGE_FILE=/home/Megatron-DeepSpeed/examples_deepspeed/rebase/gpt2-merges.txt
 DATA_PATH=/workspace/Megatron-DeepSpeed/examples_deepspeed/rebase/dataset/pile_gpt_train_text_document
@@ -43,7 +43,7 @@ OUTPUT_ARGS="
     --eval-iters 10
 "
 
-torchrun pretrain_gpt.py \
+torchrun /workspace/Megatron-DeepSpeed/pretrain_gpt.py \
     $GPT_ARGS \
     $DATA_ARGS \
     $OUTPUT_ARGS \
