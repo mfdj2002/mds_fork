@@ -216,3 +216,5 @@ RUN git clone https://github.com/mfdj2002/Megatron-DeepSpeed.git ${HOME_DIR}/Meg
 RUN git clone https://github.com/mfdj2002/pile-enron-emails.git ${STAGE_DIR}/pile-enron-emails \
     && pip install -r ${STAGE_DIR}/pile-enron-emails/requirements.txt \
     && rm -rf ${STAGE_DIR}/pile-enron-emails
+
+RUN git clone https://github.com/NVIDIA/apex ${STAGE_DIR}/apex
