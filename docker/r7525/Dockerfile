@@ -9,7 +9,40 @@ ENV STAGE_DIR=/tmp
 RUN mkdir -p ${STAGE_DIR}
 
 ENV MLNX_OFED_VERSION=5.4-3.7.5.0
-RUN apt-get install -y libnuma-dev
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    kmod \
+    chrpath \
+    ethtool \
+    udev \
+    debhelper \
+    bison \
+    tk \
+    dpatch \
+    tcl \
+    graphviz \
+    libpci-dev \ 
+    libmnl-dev \ 
+    pciutils \
+    flex \
+    libfuse2 \
+    libusb-1.0-0 \
+    swig \
+    libltdl-dev \
+    libelf-dev \ 
+    lsof
+
+# Note: `libpci3` might be a runtime library. `libpci-dev` provides development files and is commonly required for installation.
+# `libmnl0` might refer to the runtime library, and `libmnl-dev` is the development package.
+# `libelf1` might refer to the runtime library. `libelf-dev` provides the development files.
+    
+
+# Note about package names:
+# Some package names might slightly vary between different versions of Debian/Ubuntu or might represent the runtime library rather than the development package.
+# It's recommended to check for the exact package names if you encounter any issues during installation.
+
+# echo "Installation of required packages is complete."
 RUN cd ${STAGE_DIR} && \
         wget -q -O - http://www.mellanox.com/downloads/ofed/MLNX_OFED-${MLNX_OFED_VERSION}/MLNX_OFED_LINUX-${MLNX_OFED_VERSION}-ubuntu20.04-x86_64.tgz | tar xzf - && \
         cd MLNX_OFED_LINUX-${MLNX_OFED_VERSION}-ubuntu20.04-x86_64 && \
