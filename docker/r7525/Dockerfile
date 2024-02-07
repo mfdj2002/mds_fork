@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV STAGE_DIR=/tmp
 RUN mkdir -p ${STAGE_DIR}
 
-ENV MLNX_OFED_VERSION=5.4-3.7.5.0
+ENV MLNX_OFED_VERSION=4.9-7.1.0.0
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
