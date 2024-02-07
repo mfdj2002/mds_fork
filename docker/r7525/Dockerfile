@@ -10,29 +10,29 @@ RUN mkdir -p ${STAGE_DIR}
 
 ENV MLNX_OFED_VERSION=4.9-7.1.0.0
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    kmod \
-    chrpath \
-    ethtool \
-    udev \
-    debhelper \
-    bison \
-    tk \
-    dpatch \
-    tcl \
-    graphviz \
-    libpci-dev \ 
-    libmnl-dev \ 
-    pciutils \
-    flex \
-    libfuse2 \
-    libusb-1.0-0 \
-    swig \
-    libltdl-dev \
-    libelf-dev \ 
-    lsof \
-    libcap2
+# RUN apt-get update && \
+#     apt-get install -y --no-install-recommends \
+#     kmod \
+#     chrpath \
+#     ethtool \
+#     udev \
+#     debhelper \
+#     bison \
+#     tk \
+#     dpatch \
+#     tcl \
+#     graphviz \
+#     libpci-dev \ 
+#     libmnl-dev \ 
+#     pciutils \
+#     flex \
+#     libfuse2 \
+#     libusb-1.0-0 \
+#     swig \
+#     libltdl-dev \
+#     libelf-dev \ 
+#     lsof \
+#     libcap2
 
 # Note: `libpci3` might be a runtime library. `libpci-dev` provides development files and is commonly required for installation.
 # `libmnl0` might refer to the runtime library, and `libmnl-dev` is the development package.
@@ -47,7 +47,7 @@ RUN apt-get update && \
 RUN cd ${STAGE_DIR} && \
         wget -q -O - http://www.mellanox.com/downloads/ofed/MLNX_OFED-${MLNX_OFED_VERSION}/MLNX_OFED_LINUX-${MLNX_OFED_VERSION}-ubuntu20.04-x86_64.tgz | tar xzf - && \
         cd MLNX_OFED_LINUX-${MLNX_OFED_VERSION}-ubuntu20.04-x86_64 && \
-        ./mlnxofedinstall --user-space-only --without-fw-update --all -q && \
+        ./mlnxofedinstall --force --user-space-only --without-fw-update --all -q && \
         cd ${STAGE_DIR} && \
         rm -rf ${STAGE_DIR}/MLNX_OFED_LINUX-${MLNX_OFED_VERSION}-ubuntu20.04-x86_64*
 
