@@ -10,8 +10,8 @@ RUN mkdir -p ${STAGE_DIR}
 
 ENV MLNX_OFED_VERSION=4.9-7.1.0.0
 
-# RUN apt-get update && \
-#     apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libcap2
 #     kmod \
 #     chrpath \
 #     ethtool \
@@ -32,7 +32,7 @@ ENV MLNX_OFED_VERSION=4.9-7.1.0.0
 #     libltdl-dev \
 #     libelf-dev \ 
 #     lsof \
-#     libcap2
+#     
 
 # Note: `libpci3` might be a runtime library. `libpci-dev` provides development files and is commonly required for installation.
 # `libmnl0` might refer to the runtime library, and `libmnl-dev` is the development package.
